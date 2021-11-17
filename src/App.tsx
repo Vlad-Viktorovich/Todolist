@@ -10,18 +10,17 @@ type TodolistType = {
     filter: FilterValuesType
 }
 
-
 export const App = () => {
 
     let todolistId1 = v1()
     let todolistId2 = v1()
 
-    let [todolists, setTodolidts] = useState<Array<TodolistType>>([
+    let [todolists, setTodolists] = useState<Array<TodolistType>>([
         {id: todolistId1, title: 'What to learn', filter: 'Active'},
         {id: todolistId2, title: 'What to buy', filter: 'Completed'}
     ])
 
-    let [tasksObj, setTasksObj] = useState<any>({
+    let [tasksObj, setTasksObj] = useState({
         [todolistId1]: [
             {id: v1(), title: 'Rararar', isDone: true},
             {id: v1(), title: 'JS', isDone: true},
@@ -36,7 +35,7 @@ export const App = () => {
 
     const removeTask = (id: string, todolistId: string) => {
         let tasks = tasksObj[todolistId]
-        let filteredTasks = tasks.filter((t:any) => t.id !== id)
+        let filteredTasks = tasks.filter(t => t.id ! = id)
         tasksObj[todolistId] = filteredTasks
         setTasksObj({...tasksObj})
     }
@@ -48,28 +47,20 @@ export const App = () => {
         setTasksObj({...tasksObj})
     }
     const changeStatus = (taskId: string, isDone: boolean, todolistId: string) => {
-        /*let tasks = tasksObj[todolistId]
+        let tasks = tasksObj[todolistId]
         let task = tasks.find(t => t.id === taskId)
         if (task) {
             task.isDone = isDone
             setTasksObj({...tasksObj})
-        }*/
-        setTasksObj(
-            {
-                ...tasksObj,
-                [todolistId]: tasksObj[todolistId].map((task:any) => task.id === taskId ? {
-                    ...task,
-                    isDone: isDone
-                } : task)
-            })
+        }
 
     }
     const changeFilter = (value: FilterValuesType, todolistId: string) => {
-        /*let todolist = todolists.find(tl => tl.id === todolistId)
+        let todolist = todolists.find(tl => tl.id === todolistId)
         if (todolist) {
             todolist.filter = value
-        }*/
-        setTodolidts(todolists.map(tl => tl.id === todolistId ? {...tl, filter: value} : tl))
+            setTodolists([...todolists])
+        }
     }
 
 
@@ -79,10 +70,10 @@ export const App = () => {
                 todolists.map((tl) => {
                     let tasksForTodolist = tasksObj[tl.id]
                     if (tl.filter === 'Completed') {
-                        tasksForTodolist = tasksForTodolist.filter((t:any) => t.isDone === true)
+                        tasksForTodolist = tasksForTodolist.filter(t => t.isDone === true)
                     }
                     if (tl.filter === 'Active') {
-                        tasksForTodolist = tasksForTodolist.filter((t:any) => t.isDone === false)
+                        tasksForTodolist = tasksForTodolist.filter(t => t.isDone === false)
                     }
 
                     return <TodoList
