@@ -53,6 +53,9 @@ export const App = () => {
         // tasksObj[todolistId] = filteredTasks
         // setTasksObj({...tasksObj})
     }
+    const changeTodolistTitle=(id:string,newTitle:string)=>{
+        setTodolists(todolists.map(tl => tl.id === id ? {...tl, title:newTitle} : tl))
+    }
     const addTask = (title: string, todolistId: string) => {
         setTasksObj({...tasksObj, [todolistId]: [{id: v1(), title: title, isDone: false}, ...tasksObj[todolistId]]})
         // let task = {id: v1(), title: title, isDone: false}
@@ -68,6 +71,16 @@ export const App = () => {
         // //     task.isDone = isDone
         // //     setTasksObj({...tasksObj})
         // }
+
+    }
+    const changeTaskTitle = (taskId: string, newTitle:string, todolistId: string) => {
+        setTasksObj({...tasksObj, [todolistId]: tasksObj[todolistId].map(tl => tl.id === taskId ? {...tl,title:newTitle} : tl)})
+       //  let tasks = tasksObj[todolistId]
+       // let task = tasks.find(t => t.id === taskId)
+       //  if (task) {
+       //      task.title =newTitle
+       //      setTasksObj({...tasksObj})
+       //  }
 
     }
     const changeFilter = (value: FilterValuesType, todolistId: string) => {
@@ -110,8 +123,10 @@ export const App = () => {
                         removeTask={removeTask}
                         changeFilter={changeFilter}
                         changeTaskStatus={changeStatus}
+                        changeTaskTitle={changeTaskTitle}
                         filter={tl.filter}
                         removeTodolist={removeTodolist}
+                        changeTodolistTitle={changeTodolistTitle}
                     />
                 })
             }
