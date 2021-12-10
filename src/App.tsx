@@ -7,7 +7,7 @@ import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography}
 import {Menu} from '@material-ui/icons';
 
 export type FilterValuesType = 'All' | 'Completed' | 'Active'
-type TodolistType = {
+export type TodolistType = {
     id: string
     title: string
     filter: FilterValuesType
@@ -25,7 +25,6 @@ export const App = () => {
         {id: todolistId1, title: 'What to learn', filter: 'All'},
         {id: todolistId2, title: 'What to buy', filter: 'All'}
     ])
-
     let [tasksObj, setTasksObj] = useState<TasksStateType>({
         [todolistId1]: [
             {id: v1(), title: 'Rararar', isDone: true},
@@ -47,7 +46,6 @@ export const App = () => {
         // delete tasksObj[todolistId]
         // setTasksObj({...tasksObj})
     }
-
     const removeTask = (id: string, todolistId: string) => {
         setTasksObj({...tasksObj, [todolistId]: tasksObj[todolistId].filter(tl => tl.id !== id)})
         // let tasks = tasksObj[todolistId]
@@ -65,6 +63,7 @@ export const App = () => {
         // tasksObj[todolistId] = [task, ...tasks]
         // setTasksObj({...tasksObj})
     }
+
     const changeStatus = (taskId: string, isDone: boolean, todolistId: string) => {
         setTasksObj({
             ...tasksObj,
