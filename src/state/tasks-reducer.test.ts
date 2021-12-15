@@ -1,4 +1,4 @@
-import {addTaskAC, changeStatusAC, changeTaskValueNewAC, removeTaskAC, taskReducer} from './tasks-reducer';
+import {addTaskAC, changeStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer} from './tasks-reducer';
 import {removeTodolistAC} from './todolist-reducer';
 import {TasksStateType} from '../App';
 
@@ -95,7 +95,7 @@ test('changing the title for TodoListTask', () => {
         ]
     };
 
-    const action = changeTaskValueNewAC("1", "REACT-JS-CSS", "todolistId1");
+    const action = changeTaskTitleAC("1", "REACT-JS-CSS", "todolistId1");
 
     const endState = taskReducer(startState, action)
 
