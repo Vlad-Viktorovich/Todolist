@@ -70,8 +70,9 @@ export const AppWithReducers = () => {
         dispatchToTodolistsReducer(changeTodolistTitleAC(id,newTitle))
     }
     const addTodolist = (title: string) => {
-        dispatchToTasksReducer(addTodolistActionAC(title))
-        dispatchToTodolistsReducer(addTodolistActionAC(title))
+        const todolistId = v1()
+        dispatchToTasksReducer(addTodolistActionAC(title,todolistId))
+        dispatchToTodolistsReducer(addTodolistActionAC(title,todolistId))
     }
 
 
@@ -103,10 +104,9 @@ export const AppWithReducers = () => {
                                 tasksForTodolist = tasksForTodolist.filter(t => t.isDone === false)
                             }
 
-                            return <Grid item>
+                            return <Grid item key={tl.id}>
                                 <Paper style={{padding: '10px'}}>
                                     <TodoList
-                                        key={tl.id}
                                         id={tl.id}
                                         addTask={addTask}
                                         title={tl.title}

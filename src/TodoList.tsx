@@ -19,10 +19,10 @@ type TodoListPropsType = {
     changeFilter: (value: FilterValuesType, todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
     changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void
-    changeTaskTitle:(taskId: string, newTitle:string, todolistId: string)=>void
+    changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
     filter: FilterValuesType
     removeTodolist: (todolistId: string) => void
-    changeTodolistTitle:(id:string,newTitle:string)=>void
+    changeTodolistTitle: (id: string, newTitle: string) => void
 }
 
 export const TodoList = (props: TodoListPropsType) => {
@@ -44,8 +44,8 @@ export const TodoList = (props: TodoListPropsType) => {
         props.addTask(title, props.id)
     }
 
-    const changeTodolistTitle = (newTitle:string) => {
-        props.changeTodolistTitle(props.id,newTitle)
+    const changeTodolistTitle = (newTitle: string) => {
+        props.changeTodolistTitle(props.id, newTitle)
     }
 
     // const tsarFoo=(value:FilterValuesType)=>{
@@ -64,7 +64,7 @@ export const TodoList = (props: TodoListPropsType) => {
             <ul>
                 {
                     props.tasks.map(t => {
-
+                        debugger;
                         const onRemoveHandler = () => {
                             props.removeTask(t.id, props.id)
                         }
@@ -78,8 +78,8 @@ export const TodoList = (props: TodoListPropsType) => {
                         return <li key={t.id}
                                    className={t.isDone ? 'is-done' : ''}>
                             <Checkbox color={'primary'}
-                                   checked={t.isDone}
-                                   onChange={onChangeHandler}
+                                      checked={t.isDone}
+                                      onChange={onChangeHandler}
                             />
                             <EditableSpan title={t.title} onChange={onChangeTitleHandler}/>
                             <IconButton onClick={onRemoveHandler}>
