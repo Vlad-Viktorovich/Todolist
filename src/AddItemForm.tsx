@@ -5,14 +5,16 @@ import {AddBox} from '@material-ui/icons';
 type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
-export const AddItemForm = (props: AddItemFormPropsType) => {
+export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
     let [newTaskTitle, setNewTaskTitle] = useState('')
     let [error, setError] = useState<string | boolean>(false)
     const onNewTitleChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setNewTaskTitle(event.currentTarget.value)
     }
     const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-        setError(false)
+        if (error !== false) {
+            setError(false)
+        }
         if (event.key === 'Enter') {
             addTask()
         }
@@ -39,4 +41,4 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
             <IconButton onClick={addTask}><AddBox fontSize={'medium'} color={'primary'}/></IconButton>
         </div>
     )
-}
+})
