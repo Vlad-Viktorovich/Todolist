@@ -16,6 +16,10 @@ export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
+
+
+
+
 export const App = () => {
 
     let todolistId1 = v1()
