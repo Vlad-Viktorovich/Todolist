@@ -75,7 +75,6 @@ export const AppWithReducers = () => {
         dispatchToTodolistsReducer(addTodolistActionAC(title,todolistId))
     }
 
-
     return (
         <div className="App">
             <AppBar position={'static'}>
@@ -126,6 +125,5 @@ export const AppWithReducers = () => {
                 </Grid>
             </Container>
         </div>
-
     )
 }
