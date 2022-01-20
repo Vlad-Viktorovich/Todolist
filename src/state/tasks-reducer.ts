@@ -4,6 +4,7 @@ import {TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../api/
 import {Dispatch} from 'redux';
 import {ThunkDispatch} from 'redux-thunk';
 import {AppRootStateType} from './store';
+import {setAppStatusAC, SetStatusAC} from './app-reducer';
 
 export type RemoveTaskActionType = {
     type: 'REMOVE-TASK',
@@ -37,13 +38,15 @@ export type SetTasksActionType = {
 }
 
 
-type ActionsType = RemoveTaskActionType | AddTaskActionType
+type ActionsType = RemoveTaskActionType
+    | AddTaskActionType
     | ChangeTaskStatusActionType
     | ChangeTaskTitleActionType
     | AddTodolistActionType
     | RemoveTodolistActionType
     | SetTodosActionType
     | SetTasksActionType
+    | SetStatusAC
 
 
 const initialState: TasksStateType = {
@@ -145,8 +148,10 @@ export const setTasksAC = (tasks: Array<TaskType>, todolistId: string): SetTasks
 
 export const fetchTasksTC = (todolistId: string) => {
     return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC('loading'))
         todolistsAPI.getTasks(todolistId)
             .then((res) => {
+                dispatch(setAppStatusAC('succeeded'))
                 const tasks = res.data.items
                 const action = setTasksAC(tasks, todolistId)
                 dispatch(action)
@@ -156,7 +161,9 @@ export const fetchTasksTC = (todolistId: string) => {
 
 export const addFetchTask = (id: string, title: string) => async (dispatch: ThunkDispatch<AppRootStateType, unknown, ActionsType>) => {
     try {
+        dispatch(setAppStatusAC('loading'))
         const {data} = await todolistsAPI.createTask(id, title)
+        dispatch(setAppStatusAC('succeeded'))
         dispatch(addTaskAC(data.data.item))
     } catch (e) {
 
@@ -165,8 +172,10 @@ export const addFetchTask = (id: string, title: string) => async (dispatch: Thun
 
 export const removeFetchTask = (taskId: string, todolistId: string) => async (dispatch: ThunkDispatch<AppRootStateType, unknown, ActionsType>) => {
     try {
+        dispatch(setAppStatusAC('loading'))
         const {data} = await todolistsAPI.deleteTask(todolistId, taskId)
         if (data.resultCode === 0) {
+            dispatch(setAppStatusAC('succeeded'))
             dispatch(removeTaskAC(taskId, todolistId))
         }
     } catch (e) {
@@ -190,8 +199,10 @@ const model:UpdateTaskModelType={
     startDate:currentTask.startDate,
     priority:currentTask.priority
 }
+        dispatch(setAppStatusAC('loading'))
 todolistsAPI.updateTask(todolistId,taskId,model)
     .then(res=>{
+        dispatch(setAppStatusAC('succeeded'))
         dispatch(changeTaskStatusAC(taskId,status,todolistId))
     })
     }
