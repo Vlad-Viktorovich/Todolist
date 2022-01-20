@@ -26,6 +26,7 @@ import {AppRootStateType, useAppSelector} from './state/store';
 import {TaskStatuses, TaskType} from './api/todolists-api'
 import {LinearProgress} from '@mui/material';
 import {RequestStatusType} from './state/app-reducer';
+import {ErrorSnackbar} from './components/ErrorSnackbar/ErrorSnackbar';
 
 
 export type TasksStateType = {
@@ -125,6 +126,7 @@ function App() {
                     }
                 </Grid>
             </Container>
+            <ErrorSnackbar/>
         </div>
     );
 }

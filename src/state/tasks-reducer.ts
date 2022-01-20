@@ -4,7 +4,7 @@ import {TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../api/
 import {Dispatch} from 'redux';
 import {ThunkDispatch} from 'redux-thunk';
 import {AppRootStateType} from './store';
-import {setAppStatusAC, SetStatusAC} from './app-reducer';
+import {setAppErrorAC, setAppStatusAC, SetErrorAC, SetStatusAC} from './app-reducer';
 
 export type RemoveTaskActionType = {
     type: 'REMOVE-TASK',
@@ -47,6 +47,7 @@ type ActionsType = RemoveTaskActionType
     | SetTodosActionType
     | SetTasksActionType
     | SetStatusAC
+    | SetErrorAC
 
 
 const initialState: TasksStateType = {
@@ -163,12 +164,21 @@ export const addFetchTask = (id: string, title: string) => async (dispatch: Thun
     try {
         dispatch(setAppStatusAC('loading'))
         const {data} = await todolistsAPI.createTask(id, title)
-        dispatch(setAppStatusAC('succeeded'))
-        dispatch(addTaskAC(data.data.item))
+        if (data.resultCode === 0) {
+            dispatch(addTaskAC(data.data.item))
+            dispatch(setAppStatusAC('succeeded'))
+        } else {
+            if (data.messages.length) {
+                dispatch(setAppErrorAC(data.messages[0]))
+            } else {
+                dispatch(setAppErrorAC('Some error occurred'))
+            }
+            dispatch(setAppErrorAC('failed'))
+        }
     } catch (e) {
-
     }
 }
+
 
 export const removeFetchTask = (taskId: string, todolistId: string) => async (dispatch: ThunkDispatch<AppRootStateType, unknown, ActionsType>) => {
     try {
@@ -187,23 +197,23 @@ export const changeFetchTaskStatus = (todolistId: string, taskId: string, status
     const state = getState()
     const allTasks = state.tasks
     const tasksForCurrentTodo = allTasks[todolistId]
-    const currentTask =tasksForCurrentTodo.find((t)=>{
+    const currentTask = tasksForCurrentTodo.find((t) => {
         return t.id === taskId
     })
-    if(currentTask){
-const model:UpdateTaskModelType={
-    title:currentTask.title,
-    status,
-    deadline:currentTask.deadline,
-    description:currentTask.description,
-    startDate:currentTask.startDate,
-    priority:currentTask.priority
-}
+    if (currentTask) {
+        const model: UpdateTaskModelType = {
+            title: currentTask.title,
+            status,
+            deadline: currentTask.deadline,
+            description: currentTask.description,
+            startDate: currentTask.startDate,
+            priority: currentTask.priority
+        }
         dispatch(setAppStatusAC('loading'))
-todolistsAPI.updateTask(todolistId,taskId,model)
-    .then(res=>{
-        dispatch(setAppStatusAC('succeeded'))
-        dispatch(changeTaskStatusAC(taskId,status,todolistId))
-    })
+        todolistsAPI.updateTask(todolistId, taskId, model)
+            .then(res => {
+                dispatch(setAppStatusAC('succeeded'))
+                dispatch(changeTaskStatusAC(taskId, status, todolistId))
+            })
     }
 }
